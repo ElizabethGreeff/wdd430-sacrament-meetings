@@ -1,14 +1,15 @@
 import { redirect } from "next/navigation";
 import { getMeetings, getMostRecentSunday } from "@/lib/meetings-db";
 
+export const dynamic = "force-dynamic";
+
 export default function CurrentMeetingPage() {
-    const sunday = getMostRecentSunday();
-    const meetings = getMeetings(sunday);
+    const meetings = getMeetings(getMostRecentSunday());
 
     if (meetings.length > 0) {
-        redirect(`/meetings/${meetings[0].id}`);
+        redirect(`/meetings/${meetings[0].id}?from=current`);
     }
 
-    // Fallback if no meeting for this Sunday
+    // Fallback if there is no meeting for this Sunday
     redirect("/meetings");
 }

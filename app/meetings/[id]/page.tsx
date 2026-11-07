@@ -10,7 +10,7 @@ export default async function MeetingDetailPage({ params }: PageProps) {
     const { id } = await params;
     const meetingId = Number(id);
 
-    if (Number.isNaN(meetingId)) {
+    if (id.trim() === "" || !Number.isInteger(meetingId)) {
         notFound();
     }
 

@@ -96,6 +96,76 @@ const meetings: SacramentMeeting[] = [
         closingHymn: { number: 7, title: "Israel, Israel, God Is Calling" },
         closingPrayer: "Brother Ortiz",
     },
+    {
+        id: 6,
+        date: "2026-11-01",
+        meetingType: "testimony",
+        presiding: "Bishop Smith",
+        conducting: "Brother Jones",
+        announcements: ["Fast Sunday – please remember the needy", "Ward choir practice Thursday at 7pm"],
+        openingHymn: { number: 85, title: "How Firm a Foundation" },
+        openingPrayer: "Sister Williams",
+        wardBusiness: [],
+        stakeBusiness: false,
+        sacramentHymn: { number: 146, title: "Gently Raise the Sacred Strain" },
+        speakers: [],
+        closingHymn: { number: 70, title: "Come, Thou Fount of Every Blessing" },
+        closingPrayer: "Brother Davis",
+    },
+    {
+        id: 7,
+        date: "2026-11-08",
+        meetingType: "regular",
+        presiding: "Bishop Smith",
+        conducting: "Sister Ramirez",
+        announcements: ["Ward Christmas planning meeting next Sunday"],
+        openingHymn: { number: 62, title: "Praise to the Lord, the Almighty" },
+        openingPrayer: "Brother Clark",
+        wardBusiness: [{ description: "Release and sustaining of Relief Society secretary" }],
+        stakeBusiness: false,
+        sacramentHymn: { number: 174, title: "While of These Emblems We Partake" },
+        speakers: [
+            { name: "Brother Thompson", topic: "Gratitude", type: "speaker" },
+            { name: "Youth Choir", topic: "Count Your Many Blessings", type: "musical-number" },
+            { name: "Sister Brown", topic: "Serving in the Church", type: "speaker" },
+        ],
+        closingHymn: { number: 219, title: "Because I Have Been Given Much" },
+        closingPrayer: "Sister Patel",
+    },
+    {
+        id: 8,
+        date: "2026-11-15",
+        meetingType: "regular",
+        presiding: "Bishop Smith",
+        conducting: "Brother Lee",
+        openingHymn: { number: 2, title: "The Spirit of God" },
+        openingPrayer: "Sister Nguyen",
+        wardBusiness: [],
+        stakeBusiness: false,
+        sacramentHymn: { number: 170, title: "God, Our Father, Hear Us Pray" },
+        speakers: [
+            { name: "Elder Jensen", topic: "Ministering", type: "speaker" },
+            { name: "Sister Grant", topic: "Family History", type: "speaker" },
+        ],
+        closingHymn: { number: 220, title: "I'll Go Where You Want Me to Go" },
+        closingPrayer: "Brother Kim",
+    },
+    {
+        id: 9,
+        date: "2026-11-22",
+        meetingType: "general",
+        presiding: "Bishop Smith",
+        conducting: "Sister Alvarez",
+        announcements: ["Watch the broadcast together; no ward speakers this week"],
+        openingHymn: { number: 136, title: "I Know That My Redeemer Lives" },
+        openingPrayer: "Brother Foster",
+        wardBusiness: [],
+        stakeBusiness: false,
+        sacramentHymn: { number: 146, title: "Gently Raise the Sacred Strain" },
+        speakers: [],
+        closingHymn: { number: 85, title: "How Firm a Foundation" },
+        closingPrayer: "Sister Brooks",
+    },
 ];
 
 export function getMeetings(date?: string | null): SacramentMeeting[] {
@@ -110,9 +180,11 @@ export function getMeetingById(id: number): SacramentMeeting | null {
 }
 
 export function getMostRecentSunday(): string {
-    const today = new Date();
-    const dayOfWeek = today.getDay(); // 0 = Sunday
-    const sunday = new Date(today);
-    sunday.setDate(today.getDate() - dayOfWeek);
-    return sunday.toISOString().split("T")[0];
+    const sunday = new Date();
+    sunday.setDate(sunday.getDate() - sunday.getDay());
+
+    const yyyy = sunday.getFullYear();
+    const mm = String(sunday.getMonth() + 1).padStart(2, "0");
+    const dd = String(sunday.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
 }

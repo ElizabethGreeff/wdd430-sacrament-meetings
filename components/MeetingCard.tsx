@@ -12,31 +12,31 @@ export default function MeetingCard({ meeting }: MeetingCardProps) {
     );
 
     return (
-        <article className="bg-white border border-[#daa568]/50 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow">
+        <article className="bg-card border border-bark/30 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex justify-between items-start gap-3 mb-3">
                 <div>
-                    <h2 className="text-lg font-semibold text-[#523a34]">
+                    <h2 className="text-xl font-semibold text-deep-bark">
                         {formattedDate}
                     </h2>
-                    <p className="text-sm text-[#523a34]/70 capitalize">
+                    <p className="text-sm text-bark capitalize">
                         {meeting.meetingType} meeting
                     </p>
                 </div>
-                <span className="text-xs font-medium bg-[#daa568]/30 text-[#523a34] px-2 py-1 rounded">
+                <span className="text-xs font-medium bg-parchment-deep text-deep-bark px-2 py-1 rounded">
                     #{meeting.id}
                 </span>
             </div>
 
-            <p className="text-sm text-[#523a34]/80 mb-1">
+            <p className="text-sm text-bark mb-1">
                 <span className="font-medium">Presiding:</span> {meeting.presiding}
             </p>
-            <p className="text-sm text-[#523a34]/80 mb-4">
+            <p className="text-sm text-bark mb-4">
                 <span className="font-medium">Conducting:</span> {meeting.conducting}
             </p>
 
             <Link
                 href={`/meetings/${meeting.id}`}
-                className="inline-block text-sm font-medium text-[#248232] hover:text-[#2ba84a] hover:underline"
+                className="inline-block text-sm font-medium text-forest hover:text-deep-forest underline underline-offset-2"
             >
                 View full agenda
             </Link>

@@ -8,7 +8,7 @@ export async function GET(
     const { id: idParam } = await params;
     const id = Number(idParam);
 
-    if (Number.isNaN(id)) {
+    if (idParam.trim() === "" || !Number.isInteger(id)) {
         return NextResponse.json({ error: "Invalid id" }, { status: 400 });
     }
 
