@@ -1,17 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getMeetings, getMostRecentSunday } from "@/lib/meetings-db";
+import { getMeetingsByDate } from "@/lib/meetings-db";
 
-// Redirects /meetings/current to this Sunday's meeting.
 export async function GET(request: NextRequest) {
-    const meetings = getMeetings(getMostRecentSunday());
+    const date = request.nextUrl.searchParams.get("date") || null;
 
-    // Fall back to the list if there is no meeting for this Sunday
-    if (meetings.length === 0) {
-        return NextResponse.redirect(new URL("/meetings", request.url));
+    if (date !== null && !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+        return NextResponse.json(
+            { error: "date must be in YYYY-MM-DD format" },
+            { status: 400 }
+        );
     }
 
-    // ?from=current lets the nav bar highlight "This Sunday"
-    const url = new URL(`/meetings/${meetings[0].id}`, request.url);
-    url.searchParams.set("from", "current");
-    return NextResponse.redirect(url);
+    try {
+        return NextResponse.json(await getMeetingsByDate(date));
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({ error: "Database error" }, { status: 500 });
+    }
 }

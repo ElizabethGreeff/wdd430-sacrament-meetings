@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import MeetingDetail from "@/components/MeetingDetail";
-import { getMeetingById } from "@/lib/meetings-db";
+import { getMeetingById, parseMeetingId } from "@/lib/meetings-db";
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -8,13 +8,13 @@ interface PageProps {
 
 export default async function MeetingDetailPage({ params }: PageProps) {
     const { id } = await params;
-    const meetingId = Number(id);
+    const meetingId = parseMeetingId(id);
 
-    if (id.trim() === "" || !Number.isInteger(meetingId)) {
+    if (meetingId === null) {
         notFound();
     }
 
-    const meeting = getMeetingById(meetingId);
+    const meeting = await getMeetingById(meetingId);
 
     if (!meeting) {
         notFound();
