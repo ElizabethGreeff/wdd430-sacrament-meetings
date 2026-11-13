@@ -1,26 +1,56 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --parchment: #f4ecd8;
+  --parchment-deep: #e8dcc0;
+  --card: #fbf6e9;
+  --moss: #6b7f4e;
+  --forest: #4a5d3a;
+  --deep-forest: #33432a;
+  --bark: #6b4f3a;
+  --deep-bark: #4a3526;
+  --ink: #3b2f24;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-parchment: var(--parchment);
+  --color-parchment-deep: var(--parchment-deep);
+  --color-card: var(--card);
+  --color-moss: var(--moss);
+  --color-forest: var(--forest);
+  --color-deep-forest: var(--deep-forest);
+  --color-bark: var(--bark);
+  --color-deep-bark: var(--deep-bark);
+  --color-ink: var(--ink);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-cormorant), Georgia, serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--parchment);
+  color: var(--ink);
+}
+
+h1,
+h2 {
+  font-family: var(--font-display);
+}
+
+:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 2px;
+}
+
+@media print {
+  body {
+    background: white;
+  }
+
+  header,
+  nav,
+  footer,
+  .print\:hidden {
+    display: none !important;
+  }
 }
