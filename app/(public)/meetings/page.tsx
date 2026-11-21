@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Suspense } from "react";
 import MeetingCard from "@/components/MeetingCard";
 import { MeetingSearch } from "@/components/MeetingSearch";
@@ -18,7 +19,15 @@ export default async function MeetingsPage(props: {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold text-deep-forest mb-6">All Meetings</h1>
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+                <h1 className="text-3xl font-bold text-deep-forest">All Meetings</h1>
+                <Link
+                    href="/meetings/new"
+                    className="rounded-md bg-forest px-4 py-2 text-sm font-medium text-parchment transition-colors hover:bg-deep-forest"
+                >
+                    New meeting
+                </Link>
+            </div>
 
             <Suspense fallback={null}>
                 <MeetingSearch />

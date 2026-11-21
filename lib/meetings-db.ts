@@ -116,21 +116,57 @@ export function getMostRecentSunday(): string {
     return `${yyyy}-${mm}-${dd}`;
 }
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
+const toJson = (value: unknown): string | null =>
+    value === undefined ? null : JSON.stringify(value);
+
 export async function addMeeting(
     data: Omit<SacramentMeeting, "id">
 ): Promise<SacramentMeeting> {
-    throw new Error("addMeeting: database implementation coming in Week 04");
+    const rows = await sql`
+    INSERT INTO meetings (
+      date, meeting_type, presiding, conducting, announcements,
+      opening_hymn, opening_prayer, ward_business, stake_business,
+      sacrament_hymn, speakers, closing_hymn, closing_prayer
+    ) VALUES (
+      ${data.date}::date, ${data.meetingType}, ${data.presiding}, ${data.conducting},
+      ${data.announcements ?? []}::text[],
+      ${toJson(data.openingHymn)}::jsonb, ${data.openingPrayer},
+      ${toJson(data.wardBusiness)}::jsonb, ${data.stakeBusiness},
+      ${toJson(data.sacramentHymn)}::jsonb, ${toJson(data.speakers)}::jsonb,
+      ${toJson(data.closingHymn)}::jsonb, ${data.closingPrayer}
+    )
+    RETURNING id
+  `;
+    return { id: Number(rows[0].id), ...data };
 }
 
 export async function updateMeeting(
     id: number,
     updates: Partial<SacramentMeeting>
 ): Promise<SacramentMeeting | null> {
-    throw new Error("updateMeeting: database implementation coming in Week 04");
+    const rows = await sql`
+    UPDATE meetings SET
+      date           = COALESCE(${updates.date ?? null}::date, date),
+      meeting_type   = COALESCE(${updates.meetingType ?? null}::varchar, meeting_type),
+      presiding      = COALESCE(${updates.presiding ?? null}::varchar, presiding),
+      conducting     = COALESCE(${updates.conducting ?? null}::varchar, conducting),
+      announcements  = COALESCE(${updates.announcements ?? null}::text[], announcements),
+      opening_hymn   = COALESCE(${toJson(updates.openingHymn)}::jsonb, opening_hymn),
+      opening_prayer = COALESCE(${updates.openingPrayer ?? null}::varchar, opening_prayer),
+      ward_business  = COALESCE(${toJson(updates.wardBusiness)}::jsonb, ward_business),
+      stake_business = COALESCE(${updates.stakeBusiness ?? null}::boolean, stake_business),
+      sacrament_hymn = COALESCE(${toJson(updates.sacramentHymn)}::jsonb, sacrament_hymn),
+      speakers       = COALESCE(${toJson(updates.speakers)}::jsonb, speakers),
+      closing_hymn   = COALESCE(${toJson(updates.closingHymn)}::jsonb, closing_hymn),
+      closing_prayer = COALESCE(${updates.closingPrayer ?? null}::varchar, closing_prayer)
+    WHERE id = ${id}
+    RETURNING id
+  `;
+    if (rows.length === 0) return null;
+    return getMeetingById(id);
 }
 
 export async function deleteMeeting(id: number): Promise<boolean> {
-    throw new Error("deleteMeeting: database implementation coming in Week 04");
+    const rows = await sql`DELETE FROM meetings WHERE id = ${id} RETURNING id`;
+    return rows.length > 0;
 }
-/* eslint-enable @typescript-eslint/no-unused-vars */
