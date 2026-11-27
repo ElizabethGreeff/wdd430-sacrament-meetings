@@ -9,7 +9,7 @@ const links = [
     { href: "/meetings/current", label: "This Sunday" },
 ];
 
-export default function NavLinks() {
+export default function NavLinks({ children }: { children?: React.ReactNode }) {
     const pathname = usePathname();
     const fromCurrent = useSearchParams().get("from") === "current";
 
@@ -25,7 +25,7 @@ export default function NavLinks() {
 
     return (
         <nav aria-label="Main navigation" className="bg-forest text-parchment">
-            <div className="max-w-5xl mx-auto px-9 py-2 flex justify-center">
+            <div className="max-w-5xl mx-auto px-9 py-2 flex flex-wrap items-center justify-between gap-2">
                 <ul className="flex flex-wrap gap-1 py-2">
                     {links.map((link) => {
                         const isActive = isLinkActive(link.href);
@@ -47,6 +47,7 @@ export default function NavLinks() {
                         );
                     })}
                 </ul>
+                {children}
             </div>
         </nav>
     );

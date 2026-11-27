@@ -5,6 +5,32 @@ import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
 import * as db from "./meetings-db";
 import type { SacramentMeeting, SpeakerItem } from "./types";
+import { AuthError } from "next-auth";
+import { auth, signIn } from "@/auth";
+
+async function requireSession(): Promise<void> {
+    const session = await auth();
+    if (!session?.user) redirect("/login");
+}
+
+export async function authenticate(
+    _prevState: string | undefined,
+    formData: FormData
+): Promise<string | undefined> {
+    try {
+        await signIn("credentials", formData);
+    } catch (error) {
+        if (error instanceof AuthError) {
+            switch (error.type) {
+                case "CredentialsSignin":
+                    return "Invalid email or password.";
+                default:
+                    return "Something went wrong. Please try again.";
+            }
+        }
+        throw error;
+    }
+}
 
 const MEETING_TYPES = ["testimony", "regular", "stake", "general", "special"] as const;
 
@@ -154,6 +180,7 @@ export async function createMeeting(
     _prevState: State,
     formData: FormData
 ): Promise<State> {
+    await requireSession();
     const checked = validate(formData);
     if (!checked.ok) return checked.state;
 
@@ -174,6 +201,7 @@ export async function updateMeeting(
     _prevState: State,
     formData: FormData
 ): Promise<State> {
+    await requireSession();
     const checked = validate(formData);
     if (!checked.ok) return checked.state;
 
@@ -194,6 +222,7 @@ export async function updateMeeting(
 }
 
 export async function deleteMeeting(formData: FormData): Promise<void> {
+    await requireSession();
     const id = db.parseMeetingId(String(formData.get("id") ?? ""));
     if (id === null) {
         throw new Error("Invalid meeting id.");

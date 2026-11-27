@@ -4,9 +4,10 @@ import DeleteMeetingButton from "@/components/DeleteMeetingButton";
 
 interface MeetingCardProps {
     meeting: SacramentMeeting;
+    canEdit?: boolean;
 }
 
-export default function MeetingCard({ meeting }: MeetingCardProps) {
+export default function MeetingCard({ meeting, canEdit = false }: MeetingCardProps) {
     const formattedDate = new Date(meeting.date + "T00:00:00").toLocaleDateString(
         "en-US",
         { weekday: "long", year: "numeric", month: "long", day: "numeric" }
@@ -42,17 +43,21 @@ export default function MeetingCard({ meeting }: MeetingCardProps) {
                 >
                     View full agenda
                 </Link>
-                <Link
-                    href={`/meetings/${meeting.id}/edit`}
-                    aria-label={`Edit meeting on ${formattedDate}`}
-                    className="text-sm font-medium text-forest hover:text-deep-forest underline underline-offset-2"
-                >
-                    Edit
-                </Link>
-                <DeleteMeetingButton
-                    meetingId={meeting.id}
-                    label={`Delete meeting on ${formattedDate}`}
-                />
+                {canEdit ? (
+                    <>
+                        <Link
+                            href={`/meetings/${meeting.id}/edit`}
+                            aria-label={`Edit meeting on ${formattedDate}`}
+                            className="text-sm font-medium text-forest hover:text-deep-forest underline underline-offset-2"
+                        >
+                            Edit
+                        </Link>
+                        <DeleteMeetingButton
+                            meetingId={meeting.id}
+                            label={`Delete meeting on ${formattedDate}`}
+                        />
+                    </>
+                ) : null}
             </div>
         </article>
     );

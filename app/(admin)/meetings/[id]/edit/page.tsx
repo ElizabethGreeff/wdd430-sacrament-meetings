@@ -2,6 +2,13 @@ import { notFound } from "next/navigation";
 import MeetingForm from "@/components/MeetingForm";
 import { updateMeeting } from "@/lib/actions";
 import { getMeetingById, parseMeetingId } from "@/lib/meetings-db";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Edit Meeting",
+    description: "Edit the details of a sacrament meeting.",
+    robots: { index: false },
+};
 
 export default async function EditMeetingPage({
     params,
